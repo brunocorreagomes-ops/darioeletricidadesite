@@ -128,7 +128,7 @@ const App: React.FC = () => {
       {/* Floating WhatsApp Button - Hide on Admin and Confirmation */}
       {currentView !== 'admin' && currentView !== 'confirmation' && (
         <a 
-          href="https://wa.me/5511999999999" 
+          href="https://wa.me/5519997869520" 
           target="_blank" 
           rel="noopener noreferrer"
           className="fixed bottom-6 left-6 z-50 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-lg transition-transform hover:scale-110 flex items-center justify-center border-2 border-white"

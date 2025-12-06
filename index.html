@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dario Eletricidade | Soluções Industriais e Residenciais</title>
-    
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -13,227 +11,45 @@
           extend: {
             colors: {
               brand: {
-                dark: '#0B1120',
-                primary: '#1d4ed8',
-                accent: '#f97316',
-                light: '#f8fafc',
+                dark: '#0B1120', // Darker Navy for contrast
+                primary: '#1d4ed8', // Royal Blue (Mascot shirt)
+                accent: '#f97316', // Bright Orange (Gloves/Bolt)
+                light: '#f8fafc', // Slate 50
               }
-            },
-            animation: {
-                'fade-in': 'fadeIn 0.5s ease-out',
-                'bounce-short': 'bounceShort 1s infinite'
-            },
-            keyframes: {
-                fadeIn: {
-                    '0%': { opacity: '0', transform: 'translateY(10px)' },
-                    '100%': { opacity: '1', transform: 'translateY(0)' },
-                },
-                bounceShort: {
-                    '0%, 100%': { transform: 'translateY(-5%)', animationTimingFunction: 'cubic-bezier(0.8,0,1,1)' },
-                    '50%': { transform: 'translateY(0)', animationTimingFunction: 'cubic-bezier(0,0,0.2,1)' }
-                }
             }
           }
         }
       }
     </script>
-
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- Google GenAI SDK (Modern Import Map for Browser) -->
-    <script type="importmap">
-      {
-        "imports": {
-          "@google/genai": "https://esm.run/@google/genai"
-        }
-      }
-    </script>
-
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        .hidden-view { display: none !important; }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+      }
+      /* Custom scrollbar for chat */
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
     </style>
+  <script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/"
+  }
+}
+</script>
 <link rel="stylesheet" href="/index.css">
 </head>
-<body class="flex flex-col min-h-screen">
-
-    <!-- ================= NAVBAR ================= -->
-    <nav id="navbar" class="bg-brand-dark text-white sticky top-0 z-50 shadow-lg border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-24">
-                <!-- Logo -->
-                <div class="flex items-center cursor-pointer" onclick="navigateTo('home')">
-                    <div class="relative h-20 w-auto flex items-center py-2">
-                        <img src="https://i.postimg.cc/sxG9BRqJ/dario-eletricidade-QUADRADO-LOGO-FUNDO-TRANSPARENTE.png" alt="Dario Eletricidade" class="h-full w-auto object-contain">
-                    </div>
-                </div>
-
-                <!-- Desktop Menu -->
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-8">
-                        <button onclick="navigateTo('home')" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Início</button>
-                        <button onclick="navigateTo('services')" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Serviços</button>
-                        <button onclick="navigateTo('admin')" class="nav-link text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Administração</button>
-                        
-                        <button onclick="navigateTo('booking')" class="bg-brand-accent hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 flex items-center gap-2">
-                            <i data-lucide="zap" class="h-5 w-5 fill-current"></i> Orçamento Grátis
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button onclick="toggleMobileMenu()" class="text-gray-400 hover:text-white focus:outline-none">
-                        <i data-lucide="menu" class="h-8 w-8"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mobile Menu Dropdown -->
-        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-t border-gray-800">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <button onclick="navigateTo('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">Início</button>
-                <button onclick="navigateTo('services'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">Serviços</button>
-                <button onclick="navigateTo('admin'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">Administração</button>
-                <button onclick="navigateTo('booking'); toggleMobileMenu()" class="w-full flex justify-center items-center mt-4 bg-brand-accent hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition-all shadow-md gap-2">
-                    <i data-lucide="zap" class="h-5 w-5 fill-current"></i> Pedir Orçamento Grátis
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- ================= MAIN CONTENT VIEWS ================= -->
-    <main class="flex-grow">
-        
-        <!-- VIEW: HOME -->
-        <div id="view-home" class="view-section">
-            <!-- Hero Section -->
-            <div class="relative bg-brand-dark overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0 opacity-20">
-                    <div class="absolute -top-[20%] -right-[10%] w-[600px] h-[600px] rounded-full bg-brand-primary blur-[100px]"></div>
-                    <div class="absolute bottom-[10%] -left-[10%] w-[400px] h-[400px] rounded-full bg-brand-accent blur-[120px]"></div>
-                </div>
-
-                <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 flex flex-col-reverse lg:flex-row items-center gap-12">
-                    <div class="w-full lg:w-1/2 text-center lg:text-left">
-                        <div class="inline-block px-4 py-1.5 mb-6 rounded-full bg-brand-primary/20 border border-brand-primary/30 animate-fade-in">
-                            <span class="text-brand-accent font-bold tracking-wider text-xs uppercase">Eletricidade Industrial & Residencial</span>
-                        </div>
-                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mb-6">
-                            Problemas elétricos? <br/>
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-yellow-500">Resolvemos agora.</span>
-                        </h1>
-                        <p class="mt-4 max-w-lg mx-auto lg:mx-0 text-xl text-gray-300 mb-8 leading-relaxed">
-                            Solicite um orçamento rápido e sem compromisso. Atendimento de emergência e projetos completos com segurança total.
-                        </p>
-                        
-                        <!-- Quick Contact -->
-                        <div class="bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/10 max-w-md mx-auto lg:mx-0 shadow-2xl mb-8">
-                            <form onsubmit="handleQuickContact(event)" class="flex flex-col sm:flex-row gap-2">
-                                <input id="quick-phone" type="tel" placeholder="Seu WhatsApp / Telefone" class="flex-1 bg-brand-dark/50 border border-gray-600 text-white placeholder-gray-400 rounded-xl px-4 py-3 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all">
-                                <button type="submit" class="bg-brand-accent hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-orange-500/20 whitespace-nowrap flex items-center justify-center gap-2">
-                                    Pedir Orçamento <i data-lucide="arrow-right" class="h-4 w-4"></i>
-                                </button>
-                            </form>
-                            <p class="text-xs text-gray-400 mt-2 ml-2 text-center sm:text-left">Responderemos em até 30 minutos.</p>
-                        </div>
-                        
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                            <a href="https://wa.me/5511999999999" target="_blank" class="px-8 py-4 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-xl shadow-lg shadow-green-900/20 transition-all transform hover:-translate-y-1 text-lg flex items-center justify-center gap-2 w-full sm:w-auto">
-                                <i data-lucide="message-circle" class="h-5 w-5"></i> Falar no WhatsApp
-                            </a>
-                            <button onclick="navigateTo('services')" class="px-8 py-4 bg-transparent border-2 border-gray-600 hover:border-white text-white font-semibold rounded-xl transition-colors w-full sm:w-auto">
-                                Ver Todos Serviços
-                            </button>
-                        </div>
-                    </div>
-                    <div class="w-full lg:w-1/2 flex justify-center relative">
-                        <div class="relative z-10 w-full max-w-[500px] aspect-square flex items-center justify-center">
-                            <div class="absolute inset-0 bg-brand-primary/30 blur-[80px] rounded-full"></div>
-                            <img src="https://i.postimg.cc/sxG9BRqJ/dario-eletricidade-QUADRADO-LOGO-FUNDO-TRANSPARENTE.png" alt="Mascote" class="relative z-10 w-full h-full object-contain drop-shadow-2xl transform hover:scale-105 transition-transform duration-500">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Services Preview (Shared with View Services) -->
-            <div id="services-container"></div>
-            
-            <!-- Testimonials -->
-            <section class="bg-white py-24 px-4 sm:px-6 lg:px-8 border-t border-gray-100">
-                <div class="max-w-7xl mx-auto">
-                    <div class="text-center mb-16">
-                        <h2 class="text-brand-primary font-bold tracking-wide uppercase text-sm mb-3">Depoimentos</h2>
-                        <h3 className="text-3xl md:text-4xl font-extrabold text-brand-dark">O que nossos clientes dizem</h3>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="testimonials-grid">
-                        <!-- Filled by JS -->
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- VIEW: SERVICES (Reuses the container, just hides Hero) -->
-        <div id="view-services" class="view-section hidden-view">
-           <!-- Content injected via JS into a specific wrapper or reused -->
-           <div class="pt-10" id="services-page-content"></div>
-        </div>
-
-        <!-- VIEW: BOOKING -->
-        <div id="view-booking" class="view-section hidden-view bg-gray-50 min-h-[calc(100vh-80px)] py-12 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-            <div class="max-w-2xl w-full space-y-8 bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-200">
-                <div>
-                    <h2 class="mt-2 text-center text-3xl font-extrabold text-brand-dark">Solicitar Orçamento / Agendar</h2>
-                    <p class="mt-2 text-center text-sm text-gray-600">Preencha os dados abaixo e entraremos em contato rapidamente.</p>
-                </div>
-
-                <form id="booking-form" class="mt-8 space-y-8" onsubmit="handleBookingSubmit(event)">
-                    <!-- Services Grid -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-3">O que você precisa?</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4" id="service-selection-grid">
-                            <!-- Generated by JS -->
-                        </div>
-                        <input type="hidden" id="selected-service-id" value="budget">
-                    </div>
-
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><i data-lucide="user" class="h-5 w-5"></i></div>
-                                <input type="text" id="booking-name" required class="pl-10 appearance-none rounded-lg block w-full px-3 py-3 border border-gray-300 focus:ring-brand-primary focus:border-brand-primary sm:text-sm">
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Telefone / WhatsApp</label>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><i data-lucide="phone" class="h-5 w-5"></i></div>
-                                <input type="tel" id="booking-phone" oninput="maskPhone(this)" required class="pl-10 appearance-none rounded-lg block w-full px-3 py-3 border border-gray-300 focus:ring-brand-primary focus:border-brand-primary sm:text-sm" placeholder="(00) 00000-0000">
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <div class="w-full sm:w-1/2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Data</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><i data-lucide="calendar" class="h-5 w-5"></i></div>
-                                    <input type="date" id="booking-date" required class="pl-10 appearance-none rounded-lg block w-full px-3 py-3 border border-gray-300 focus:ring-brand-primary focus:border-brand-primary sm:text-sm">
-                                </div>
-                            </div>
-                            <div class="w-full sm:w-1/2">
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Horário</label>
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><i data-lucide="clock" class="h-5 w-5"></i></div>
-                                    <input type="time" id="booking-time" required class="pl-10 appearance-none rounded-lg block w-full px-3 py-3 border border-gray-300 focus:ring-brand-primary focus:border-brand-primary sm:text-sm">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="block text-sm font-medium<script type="module" src="/index.tsx"></script>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
