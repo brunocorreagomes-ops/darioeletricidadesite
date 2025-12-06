@@ -21,7 +21,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'dariogomes2525@@') { // Simple mock auth
+    if (password === 'dariogomes2525@@') {
       setIsAuthenticated(true);
     } else {
       alert('Senha incorreta');
@@ -35,13 +35,13 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
            <div className="flex justify-center mb-6">
               <div className="bg-brand-primary p-3 rounded-full">
-                  <Lock className="h-8 w-8 text-white" />
+                  <Lock className="h-8 w-8 text-white" aria-hidden="true" />
               </div>
            </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
             Acesso Restrito
           </h2>
-          <p className="text-center text-gray-400 mt-2">Área administrativa Dario Eletricidade</p>
+          <p className="text-center text-gray-300 mt-2">Área administrativa Dario Eletricidade</p>
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -57,6 +57,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
                     name="password"
                     type="password"
                     required
+                    aria-label="Senha de administrador"
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-brand-primary focus:border-brand-primary sm:text-sm"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -104,12 +105,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
           <div className="bg-white shadow rounded-lg p-6">
             <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Gerenciar Serviços Ativos</h3>
             <div className="border border-gray-200 rounded-md overflow-hidden">
-               <table className="min-w-full divide-y divide-gray-200">
+               <table className="min-w-full divide-y divide-gray-200" aria-label="Tabela de serviços">
                  <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome do Serviço</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome do Serviço</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
                     </tr>
                  </thead>
                  <tbody className="bg-white divide-y divide-gray-200">
@@ -139,12 +140,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
             <h3 className="text-lg leading-6 font-medium text-gray-900 mb-6">Configurações da Conta</h3>
             <form className="space-y-4 max-w-lg">
                <div>
-                  <label className="block text-sm font-medium text-gray-700">Email Administrativo</label>
-                  <input type="email" defaultValue="admin@darioeletricidade.com.br" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-primary focus:border-brand-primary sm:text-sm" />
+                  <label htmlFor="admin-email" className="block text-sm font-medium text-gray-700">Email Administrativo</label>
+                  <input id="admin-email" type="email" defaultValue="admin@darioeletricidade.com.br" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-primary focus:border-brand-primary sm:text-sm" />
                </div>
                <div>
-                  <label className="block text-sm font-medium text-gray-700">Alterar Senha</label>
-                  <input type="password" placeholder="Nova senha" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-primary focus:border-brand-primary sm:text-sm" />
+                  <label htmlFor="admin-new-pass" className="block text-sm font-medium text-gray-700">Alterar Senha</label>
+                  <input id="admin-new-pass" type="password" placeholder="Nova senha" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-primary focus:border-brand-primary sm:text-sm" />
                </div>
                <div className="flex items-center">
                   <input id="notif" type="checkbox" className="h-4 w-4 text-brand-primary focus:ring-brand-primary border-gray-300 rounded" defaultChecked />
@@ -164,11 +165,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
               <h3 className="text-lg leading-6 font-medium text-gray-900">Lista de Agendamentos</h3>
               <div className="relative">
                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Search className="h-4 w-4 text-gray-400" />
+                    <Search className="h-4 w-4 text-gray-400" aria-hidden="true" />
                  </div>
                  <input 
                     type="text" 
                     placeholder="Buscar cliente..." 
+                    aria-label="Buscar agendamentos"
                     className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-brand-primary focus:border-brand-primary"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -184,7 +186,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
                       <div className="px-4 py-4 sm:px-6 hover:bg-gray-50 transition-colors">
                       <div className="flex items-center justify-between">
                           <p className="text-sm font-bold text-brand-dark flex items-center">
-                             <User className="h-4 w-4 mr-2 text-gray-400" />
+                             <User className="h-4 w-4 mr-2 text-gray-400" aria-hidden="true" />
                              {appointment.customerName}
                           </p>
                           <div className="ml-2 flex-shrink-0 flex">
@@ -192,12 +194,12 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
                           </div>
                       </div>
                       <div className="mt-2 sm:flex sm:justify-between">
-                          <div className="sm:flex flex-col sm:flex-row sm:items-center text-sm text-gray-500">
+                          <div className="sm:flex flex-col sm:flex-row sm:items-center text-sm text-gray-600">
                              <p className="flex items-center mr-6 mb-2 sm:mb-0">
-                                <span className="font-semibold mr-1 text-gray-700">Serviço:</span> {appointment.serviceId}
+                                <span className="font-semibold mr-1 text-gray-800">Serviço:</span> {appointment.serviceId}
                              </p>
                              <p className="flex items-center mr-6 mb-2 sm:mb-0">
-                                <span className="font-semibold mr-1 text-gray-700">Tel:</span> {appointment.customerPhone}
+                                <span className="font-semibold mr-1 text-gray-800">Tel:</span> {appointment.customerPhone}
                              </p>
                              <div className="flex items-center gap-4">
                                 <p className="flex items-center">
@@ -213,8 +215,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
                       </div>
                       
                       {appointment.notes && (
-                        <div className="mt-3 text-sm text-gray-600 bg-yellow-50 p-3 rounded-md border border-yellow-100">
-                             <span className="font-semibold text-yellow-800">Nota:</span> {appointment.notes}
+                        <div className="mt-3 text-sm text-gray-700 bg-yellow-50 p-3 rounded-md border border-yellow-200">
+                             <span className="font-semibold text-yellow-900">Nota:</span> {appointment.notes}
                         </div>
                       )}
 
@@ -223,13 +225,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
                               <>
                               <button
                                   onClick={() => onUpdateStatus(appointment.id, AppointmentStatus.CONFIRMED)}
-                                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none transition-colors"
+                                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-green-800 bg-green-100 hover:bg-green-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+                                  aria-label={`Aprovar agendamento de ${appointment.customerName}`}
                               >
                                   <CheckCircle className="h-3 w-3 mr-1" /> Aprovar
                               </button>
                               <button
                                   onClick={() => onUpdateStatus(appointment.id, AppointmentStatus.CANCELLED)}
-                                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none transition-colors"
+                                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-red-800 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+                                  aria-label={`Rejeitar agendamento de ${appointment.customerName}`}
                               >
                                   <XCircle className="h-3 w-3 mr-1" /> Rejeitar
                               </button>
@@ -238,7 +242,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
                           {appointment.status === AppointmentStatus.CONFIRMED && (
                               <button
                                   onClick={() => onUpdateStatus(appointment.id, AppointmentStatus.COMPLETED)}
-                                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none transition-colors"
+                                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-blue-800 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                                  aria-label={`Concluir agendamento de ${appointment.customerName}`}
                               >
                                   <CheckCircle className="h-3 w-3 mr-1" /> Concluir
                               </button>
@@ -270,7 +275,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
               activeTab === 'appointments' ? 'bg-brand-primary text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'
             }`}
           >
-            <LayoutDashboard className="mr-3 h-5 w-5" />
+            <LayoutDashboard className="mr-3 h-5 w-5" aria-hidden="true" />
             Agendamentos
           </button>
 
@@ -280,7 +285,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
               activeTab === 'services' ? 'bg-brand-primary text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'
             }`}
           >
-            <List className="mr-3 h-5 w-5" />
+            <List className="mr-3 h-5 w-5" aria-hidden="true" />
             Serviços
           </button>
 
@@ -290,7 +295,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
               activeTab === 'settings' ? 'bg-brand-primary text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'
             }`}
           >
-            <Settings className="mr-3 h-5 w-5" />
+            <Settings className="mr-3 h-5 w-5" aria-hidden="true" />
             Configurações
           </button>
         </nav>
@@ -303,7 +308,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
             }}
             className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded-md transition-colors"
           >
-            <LogOut className="mr-3 h-5 w-5" />
+            <LogOut className="mr-3 h-5 w-5" aria-hidden="true" />
             Sair do Sistema
           </button>
         </div>
@@ -314,7 +319,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
         {/* Mobile Header */}
         <header className="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-6 md:hidden">
             <span className="font-bold text-lg text-brand-dark">Painel Administrativo</span>
-            <button onClick={onLogout} className="text-gray-500 hover:text-red-600">
+            <button onClick={onLogout} className="text-gray-500 hover:text-red-600" aria-label="Sair">
                <LogOut className="h-6 w-6" />
             </button>
         </header>
@@ -348,7 +353,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
                 <h1 className="text-2xl font-bold text-gray-900 capitalize">
                   {activeTab === 'appointments' ? 'Gestão de Agendamentos' : activeTab === 'services' ? 'Catálogo de Serviços' : 'Configurações'}
                 </h1>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-600">
                    Bem-vindo de volta, Administrador.
                 </p>
               </div>

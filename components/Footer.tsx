@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
                 <img 
                   src="https://i.postimg.cc/sxG9BRqJ/dario-eletricidade-QUADRADO-LOGO-FUNDO-TRANSPARENTE.png" 
                   alt="Dario Eletricidade" 
-                  className="h-16 w-auto" // Slightly increased size for better visibility
+                  className="h-16 w-auto" 
                 />
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
@@ -24,6 +24,8 @@ const Footer: React.FC = () => {
             <h4 className="text-white font-semibold uppercase tracking-wider mb-4">Serviços</h4>
             <ul className="space-y-2 text-sm">
               <li><a href="#" className="hover:text-brand-accent transition-colors">Industrial</a></li>
+              <li><a href="#" className="hover:text-brand-accent transition-colors">Laudos e CRT</a></li>
+              <li><a href="#" className="hover:text-brand-accent transition-colors">Orçamentos</a></li>
             </ul>
           </div>
 
@@ -56,7 +58,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-xs text-gray-500">
-          &copy; {new Date().getFullYear() Criado por Orvalia Studi.  Dario Eletricidade. Todos os direitos reservados.
+          &copy; {new Date().getFullYear()} Dario Eletricidade. Criado por Orvalia Studio. Todos os direitos reservados.
         </div>
       </div>
     </footer>

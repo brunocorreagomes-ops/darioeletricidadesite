@@ -33,22 +33,22 @@ const servicesList: Service[] = [
 
 const getIcon = (name: string) => {
   switch (name) {
-    case 'home': return <Home className="h-10 w-10 text-white" />;
-    case 'factory': return <Factory className="h-10 w-10 text-white" />;
-    case 'sun': return <Sun className="h-10 w-10 text-white" />;
-    case 'dollar': return <DollarSign className="h-10 w-10 text-white" />;
-    default: return <FileCheck className="h-10 w-10 text-white" />;
+    case 'home': return <Home className="h-10 w-10 text-white" aria-hidden="true" />;
+    case 'factory': return <Factory className="h-10 w-10 text-white" aria-hidden="true" />;
+    case 'sun': return <Sun className="h-10 w-10 text-white" aria-hidden="true" />;
+    case 'dollar': return <DollarSign className="h-10 w-10 text-white" aria-hidden="true" />;
+    default: return <FileCheck className="h-10 w-10 text-white" aria-hidden="true" />;
   }
 };
 
 const ServicesSection: React.FC<ServicesSectionProps> = ({ onBookService }) => {
   return (
-    <div className="bg-gray-50 py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
+    <section className="bg-gray-50 py-16 lg:py-24 px-4 sm:px-6 lg:px-8" aria-label="Nossos Serviços">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16 lg:mb-20">
           <h2 className="text-brand-primary font-bold tracking-wide uppercase text-sm mb-3">Nossos Serviços</h2>
           <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-dark mb-6">Soluções Corporativas e Industriais</h3>
-          <p className="max-w-2xl mx-auto text-gray-500 text-lg md:text-xl">
+          <p className="max-w-2xl mx-auto text-gray-600 text-lg md:text-xl">
             Especialistas em instalações elétricas, regularização técnica e manutenção para sua empresa.
           </p>
         </div>
@@ -69,11 +69,11 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onBookService }) => {
               <div 
                 key={service.id} 
                 className={`
-                  bg-white rounded-2xl transition-all duration-300 overflow-hidden group flex flex-col hover:-translate-y-2 relative
+                  bg-white rounded-2xl transition-all duration-300 overflow-hidden group flex flex-col relative transform
                   ${gridSpanClass}
                   ${isHighlight 
-                    ? 'border-2 border-brand-accent shadow-2xl shadow-brand-accent/20 z-10 ring-4 ring-orange-50 lg:scale-105 hover:scale-[1.02] hover:lg:scale-110' 
-                    : 'border border-gray-100 shadow-xl hover:shadow-2xl hover:scale-[1.02]'
+                    ? 'border-2 border-brand-accent shadow-2xl shadow-brand-accent/20 z-10 ring-4 ring-orange-50 lg:scale-105 hover:scale-110' 
+                    : 'border border-gray-100 shadow-xl hover:shadow-2xl hover:scale-105'
                   }
                 `}
               >
@@ -87,8 +87,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onBookService }) => {
                 <div className={`
                   p-8 flex justify-center items-center transition-all duration-500 relative overflow-hidden h-40
                   ${isHighlight 
-                    ? 'bg-gradient-to-br from-brand-accent to-orange-600' 
-                    : 'bg-gradient-to-br from-brand-dark to-[#1e293b] group-hover:from-brand-primary group-hover:to-blue-600'
+                    ? 'bg-gradient-to-br from-brand-accent to-orange-700' 
+                    : 'bg-gradient-to-br from-brand-dark to-[#1e293b] group-hover:from-brand-primary group-hover:to-blue-700'
                   }
                 `}>
                    {/* Decorative background effect */}
@@ -104,4 +104,38 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onBookService }) => {
                     {service.title}
                   </h4>
                   
-                  <p className="text-base text-gray-
+                  <p className="text-base text-gray-700 mb-8 leading-relaxed flex-grow">
+                    {service.description}
+                  </p>
+                  
+                  <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-auto">
+                     <div className="flex flex-col">
+                        <span className="text-xs text-gray-500 uppercase font-semibold tracking-wider mb-1">Investimento</span>
+                        <span className={`text-lg font-bold ${isHighlight ? 'text-brand-accent' : 'text-brand-dark'}`}>{service.priceRange}</span>
+                     </div>
+                     
+                     <button 
+                      onClick={() => onBookService(service.id)}
+                      aria-label={`Agendar ${service.title}`}
+                      className={`
+                        w-full sm:w-auto px-5 py-3 rounded-xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 group-hover:shadow-lg hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-offset-2
+                        ${isHighlight 
+                          ? 'bg-brand-accent text-white hover:bg-orange-700 shadow-md shadow-orange-200 focus:ring-brand-accent' 
+                          : 'bg-gray-100 hover:bg-brand-accent text-brand-dark hover:text-white focus:ring-brand-dark'
+                        }
+                      `}
+                     >
+                       Agendar <Zap className="h-4 w-4" aria-hidden="true" />
+                     </button>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ServicesSection;

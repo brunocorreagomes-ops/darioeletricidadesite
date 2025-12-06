@@ -104,11 +104,11 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, onCancel, initialPh
           </p>
         </div>
 
-        <form className="mt-8 space-y-8" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-8" onSubmit={handleSubmit} noValidate>
           
           {/* Visual Service Selection */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">O que você precisa?</label>
+          <div role="group" aria-labelledby="service-label">
+            <span id="service-label" className="block text-sm font-medium text-gray-700 mb-3">O que você precisa?</span>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {serviceOptions.map((option) => {
                 const Icon = option.icon;
@@ -117,10 +117,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, onCancel, initialPh
                 const isBudget = option.id === 'budget';
                 
                 return (
-                  <div
+                  <button
+                    type="button"
                     key={option.id}
                     onClick={() => handleServiceSelect(option.id)}
-                    className={`cursor-pointer relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 ${
+                    aria-pressed={isSelected}
+                    className={`relative flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary ${
                       isSelected
                         ? 'border-brand-primary bg-sky-50 text-brand-primary shadow-sm scale-105'
                         : isBudget 
@@ -130,12 +132,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, onCancel, initialPh
                   >
                     {isSelected && (
                       <div className="absolute top-2 right-2">
-                        <CheckCircle2 className="h-4 w-4 text-brand-primary" />
+                        <CheckCircle2 className="h-4 w-4 text-brand-primary" aria-hidden="true" />
                       </div>
                     )}
-                    <Icon className={`h-8 w-8 mb-2 ${isSelected ? 'text-brand-primary' : isBudget ? 'text-brand-accent' : 'text-gray-400'}`} />
+                    <Icon className={`h-8 w-8 mb-2 ${isSelected ? 'text-brand-primary' : isBudget ? 'text-brand-accent' : 'text-gray-400'}`} aria-hidden="true" />
                     <span className={`text-sm font-bold ${isBudget && !isSelected ? 'text-brand-accent' : ''}`}>{option.label}</span>
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -147,13 +149,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, onCancel, initialPh
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
+                  <User className="h-5 w-5 text-gray-400" aria-hidden="true" />
                 </div>
                 <input
                   id="name"
                   name="name"
                   type="text"
                   required
+                  aria-required="true"
                   className="appearance-none rounded-lg relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-brand-primary focus:border-brand-primary sm:text-sm transition-shadow"
                   placeholder="Seu nome"
                   value={formData.name}
@@ -167,13 +170,16 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, onCancel, initialPh
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Telefone / WhatsApp</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Phone className="h-5 w-5 text-gray-400" />
+                  <Phone className="h-5 w-5 text-gray-400" aria-hidden="true" />
                 </div>
                 <input
                   id="phone"
                   name="phone"
                   type="tel"
                   required
+                  aria-required="true"
+                  aria-invalid={!!errors.phone}
+                  aria-describedby={errors.phone ? "phone-error" : undefined}
                   className={`appearance-none rounded-lg relative block w-full px-3 py-3 pl-10 border placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-brand-primary focus:border-brand-primary sm:text-sm transition-shadow ${
                     errors.phone ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300'
                   }`}
@@ -183,12 +189,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, onCancel, initialPh
                 />
                 {errors.phone && (
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <AlertCircle className="h-5 w-5 text-red-500" />
+                    <AlertCircle className="h-5 w-5 text-red-500" aria-hidden="true" />
                   </div>
                 )}
               </div>
               {errors.phone && (
-                <p className="mt-1 text-xs text-red-600 font-medium">{errors.phone}</p>
+                <p id="phone-error" className="mt-1 text-xs text-red-600 font-medium" role="alert">{errors.phone}</p>
               )}
             </div>
 
@@ -198,13 +204,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, onCancel, initialPh
                 <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">Data Preferida</label>
                 <div className="relative">
                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Calendar className="h-5 w-5 text-gray-400" />
+                    <Calendar className="h-5 w-5 text-gray-400" aria-hidden="true" />
                   </div>
                   <input
                     id="date"
                     name="date"
                     type="date"
                     required
+                    aria-required="true"
                     className="appearance-none rounded-lg relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-brand-primary focus:border-brand-primary sm:text-sm"
                     value={formData.date}
                     onChange={handleChange}
@@ -217,13 +224,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, onCancel, initialPh
                 <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-1">Horário</label>
                  <div className="relative">
                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Clock className="h-5 w-5 text-gray-400" />
+                    <Clock className="h-5 w-5 text-gray-400" aria-hidden="true" />
                   </div>
                   <input
                     id="time"
                     name="time"
                     type="time"
                     required
+                    aria-required="true"
                     className="appearance-none rounded-lg relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-brand-primary focus:border-brand-primary sm:text-sm"
                     value={formData.time}
                     onChange={handleChange}

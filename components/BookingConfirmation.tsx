@@ -10,6 +10,17 @@ interface BookingConfirmationProps {
 const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ appointment, onHomeClick }) => {
   if (!appointment) return null;
 
+  const getServiceName = (id: string) => {
+    switch(id) {
+      case 'ind': return 'Manutenção Industrial';
+      case 'proj': return 'Laudos e Projetos (CRT)';
+      case 'budget': return 'Orçamento Geral';
+      case 'res': return 'Residencial'; // Suporte legado
+      case 'solar': return 'Energia Solar'; // Suporte legado
+      default: return 'Serviço Personalizado';
+    }
+  };
+
   return (
     <div className="min-h-[calc(100vh-80px)] bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 animate-fade-in">
       <div className="max-w-lg w-full bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
@@ -71,10 +82,7 @@ const BookingConfirmation: React.FC<BookingConfirmationProps> = ({ appointment, 
               <div>
                 <p className="text-xs text-gray-500">Serviço Solicitado</p>
                 <p className="font-bold text-brand-primary capitalize">
-                  {appointment.serviceId === 'res' ? 'Residencial' : 
-                   appointment.serviceId === 'ind' ? 'Industrial' :
-                   appointment.serviceId === 'solar' ? 'Energia Solar' :
-                   appointment.serviceId === 'proj' ? 'Projetos' : 'Orçamento'}
+                  {getServiceName(appointment.serviceId)}
                 </p>
               </div>
             </div>
