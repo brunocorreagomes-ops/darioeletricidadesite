@@ -21,7 +21,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'admin') { // Simple mock auth
+    if (password === 'dariogomes2525@@') { // Simple mock auth
       setIsAuthenticated(true);
     } else {
       alert('Senha incorreta');

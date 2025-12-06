@@ -43,28 +43,37 @@ const getIcon = (name: string) => {
 
 const ServicesSection: React.FC<ServicesSectionProps> = ({ onBookService }) => {
   return (
-    <div className="bg-gray-50 py-24 px-4 sm:px-6 lg:px-8">
+    <div className="bg-gray-50 py-16 lg:py-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
+        <div className="text-center mb-16 lg:mb-20">
           <h2 className="text-brand-primary font-bold tracking-wide uppercase text-sm mb-3">Nossos Serviços</h2>
-          <h3 className="text-4xl md:text-5xl font-extrabold text-brand-dark mb-6">Soluções Corporativas e Industriais</h3>
-          <p className="max-w-2xl mx-auto text-gray-500 text-xl">
+          <h3 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-dark mb-6">Soluções Corporativas e Industriais</h3>
+          <p className="max-w-2xl mx-auto text-gray-500 text-lg md:text-xl">
             Especialistas em instalações elétricas, regularização técnica e manutenção para sua empresa.
           </p>
         </div>
 
-        {/* Centered Grid with fewer items */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {servicesList.map((service) => {
+        {/* 
+            Responsive Grid:
+            1 col on mobile
+            2 cols on tablet (md) - Last item spans 2 cols
+            3 cols on desktop (lg)
+        */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+          {servicesList.map((service, index) => {
             const isHighlight = service.id === 'budget';
+            // Make the last item span 2 columns on tablet devices (md) for better layout balance
+            const gridSpanClass = index === 2 ? 'md:col-span-2 lg:col-span-1' : '';
+
             return (
               <div 
                 key={service.id} 
                 className={`
                   bg-white rounded-2xl transition-all duration-300 overflow-hidden group flex flex-col hover:-translate-y-2 relative
+                  ${gridSpanClass}
                   ${isHighlight 
-                    ? 'border-2 border-brand-accent shadow-2xl shadow-brand-accent/20 md:scale-105 z-10 ring-4 ring-orange-50' 
-                    : 'border border-gray-100 shadow-xl hover:shadow-2xl'
+                    ? 'border-2 border-brand-accent shadow-2xl shadow-brand-accent/20 z-10 ring-4 ring-orange-50 lg:scale-105 hover:scale-[1.02] hover:lg:scale-110' 
+                    : 'border border-gray-100 shadow-xl hover:shadow-2xl hover:scale-[1.02]'
                   }
                 `}
               >
@@ -90,42 +99,9 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onBookService }) => {
                 </div>
 
                 {/* Content Section */}
-                <div className="p-8 flex-1 flex flex-col">
-                  <h4 className={`text-2xl font-bold mb-4 transition-colors ${isHighlight ? 'text-brand-accent' : 'text-gray-900 group-hover:text-brand-primary'}`}>
+                <div className="p-6 sm:p-8 flex-1 flex flex-col">
+                  <h4 className={`text-xl sm:text-2xl font-bold mb-4 transition-colors ${isHighlight ? 'text-brand-accent' : 'text-gray-900 group-hover:text-brand-primary'}`}>
                     {service.title}
                   </h4>
                   
-                  <p className="text-base text-gray-600 mb-8 leading-relaxed flex-grow">
-                    {service.description}
-                  </p>
-                  
-                  <div className="pt-6 border-t border-gray-100 flex items-center justify-between mt-auto">
-                     <div className="flex flex-col">
-                        <span className="text-xs text-gray-400 uppercase font-semibold tracking-wider mb-1">Investimento</span>
-                        <span className={`text-lg font-bold ${isHighlight ? 'text-brand-accent' : 'text-brand-dark'}`}>{service.priceRange}</span>
-                     </div>
-                     
-                     <button 
-                      onClick={() => onBookService(service.id)}
-                      className={`
-                        px-5 py-3 rounded-xl font-bold text-sm transition-all duration-300 flex items-center gap-2 group-hover:shadow-lg
-                        ${isHighlight 
-                          ? 'bg-brand-accent text-white hover:bg-orange-600 shadow-md shadow-orange-200' 
-                          : 'bg-gray-100 hover:bg-brand-accent text-brand-dark hover:text-white'
-                        }
-                      `}
-                     >
-                       Agendar <Zap className="h-4 w-4" />
-                     </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ServicesSection;
+                  <p className="text-base text-gray-

@@ -23,10 +23,7 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-white font-semibold uppercase tracking-wider mb-4">Serviços</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-brand-accent transition-colors">Residencial</a></li>
               <li><a href="#" className="hover:text-brand-accent transition-colors">Industrial</a></li>
-              <li><a href="#" className="hover:text-brand-accent transition-colors">Predial</a></li>
-              <li><a href="#" className="hover:text-brand-accent transition-colors">Energia Solar</a></li>
             </ul>
           </div>
 
@@ -35,7 +32,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-3 text-sm">
               <li className="flex items-center">
                 <Phone className="h-4 w-4 mr-2 text-brand-accent" />
-                (11) 99999-9999
+                (19) 99786-9520
               </li>
               <li className="flex items-center">
                 <Mail className="h-4 w-4 mr-2 text-brand-accent" />
@@ -43,7 +40,7 @@ const Footer: React.FC = () => {
               </li>
               <li className="flex items-center">
                 <MapPin className="h-4 w-4 mr-2 text-brand-accent" />
-                São Paulo, SP
+                Indaiatuba, SP
               </li>
             </ul>
           </div>
@@ -59,7 +56,7 @@ const Footer: React.FC = () => {
         </div>
 
         <div className="border-t border-gray-800 mt-12 pt-8 text-center text-xs text-gray-500">
-          &copy; {new Date().getFullYear()} Dario Eletricidade. Todos os direitos reservados.
+          &copy; {new Date().getFullYear() Criado por Orvalia Studi.  Dario Eletricidade. Todos os direitos reservados.
         </div>
       </div>
     </footer>

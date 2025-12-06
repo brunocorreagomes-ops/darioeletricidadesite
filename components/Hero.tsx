@@ -44,28 +44,33 @@ const Hero: React.FC<HeroProps> = ({ onBookClick, onQuickContact }) => {
           </p>
           
           {/* Quick Contact Input Box */}
-          <div className="bg-white/10 backdrop-blur-md p-2 rounded-2xl border border-white/10 max-w-md mx-auto lg:mx-0 shadow-2xl mb-8">
-             <form onSubmit={handleQuickSubmit} className="flex flex-col sm:flex-row gap-2">
+          <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/10 max-w-lg mx-auto lg:mx-0 shadow-2xl mb-8">
+             <form onSubmit={handleQuickSubmit} className="flex flex-col sm:flex-row gap-4 items-center">
                 <input 
                   type="tel" 
                   placeholder="Seu WhatsApp / Telefone"
                   value={quickPhone}
                   onChange={(e) => setQuickPhone(e.target.value)}
-                  className="flex-1 bg-brand-dark/50 border border-gray-600 text-white placeholder-gray-400 rounded-xl px-4 py-3 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all"
+                  className="w-full sm:flex-1 bg-brand-dark/50 border border-gray-600 text-white placeholder-gray-400 rounded-xl px-4 py-4 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition-all text-lg"
                 />
-                <button 
-                  type="submit"
-                  className="bg-brand-accent hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-orange-500/20 whitespace-nowrap flex items-center justify-center gap-2"
-                >
-                  Pedir Orçamento <ArrowRight className="h-4 w-4" />
-                </button>
+                
+                {/* Enhanced Button with Glow/Pulse */}
+                <div className="relative w-full sm:w-auto group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-brand-accent to-orange-400 rounded-xl blur opacity-40 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+                    <button 
+                      type="submit"
+                      className="relative w-full sm:w-auto bg-gradient-to-r from-brand-accent to-orange-600 hover:from-orange-500 hover:to-orange-700 text-white font-extrabold py-4 px-8 rounded-xl transition-all shadow-xl shadow-orange-900/20 whitespace-nowrap flex items-center justify-center gap-2 text-lg transform group-hover:scale-[1.02]"
+                    >
+                      Pedir Orçamento <ArrowRight className="h-5 w-5" />
+                    </button>
+                </div>
              </form>
              <p className="text-xs text-gray-400 mt-2 ml-2 text-center sm:text-left">Responderemos em até 30 minutos.</p>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <a 
-              href="https://wa.me/5511999999999" 
+              href="https://wa.me/5519997869520" 
               target="_blank" 
               rel="noopener noreferrer"
               className="px-8 py-4 bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-xl shadow-lg shadow-green-900/20 transition-all transform hover:-translate-y-1 text-lg flex items-center justify-center gap-2 w-full sm:w-auto"
