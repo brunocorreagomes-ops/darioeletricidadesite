@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Appointment, AppointmentStatus } from '../types';
-import { CheckCircle, XCircle, Calendar, Clock, Lock, LogOut } from 'lucide-react';
+import { 
+  CheckCircle, XCircle, Calendar, Clock, Lock, LogOut, 
+  LayoutDashboard, List, Settings, Search, User, FileText 
+} from 'lucide-react';
 
 interface AdminDashboardProps {
   appointments: Appointment[];
@@ -8,9 +11,13 @@ interface AdminDashboardProps {
   onLogout: () => void;
 }
 
+type AdminTab = 'appointments' | 'services' | 'settings';
+
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateStatus, onLogout }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
+  const [activeTab, setActiveTab] = useState<AdminTab>('appointments');
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,6 +28,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
     }
   };
 
+  // Login Screen
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-brand-dark flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -84,103 +92,269 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ appointments, onUpdateS
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="md:flex md:items-center md:justify-between mb-8">
-          <div className="flex-1 min-w-0">
-            <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-              Painel de Controle
-            </h2>
-            <p className="mt-1 text-sm text-gray-500">Gerencie seus agendamentos.</p>
+  const filteredAppointments = appointments.filter(app => 
+    app.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    app.serviceId.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'services':
+        return (
+          <div className="bg-white shadow rounded-lg p-6">
+            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Gerenciar Serviços Ativos</h3>
+            <div className="border border-gray-200 rounded-md overflow-hidden">
+               <table className="min-w-full divide-y divide-gray-200">
+                 <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome do Serviço</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                    </tr>
+                 </thead>
+                 <tbody className="bg-white divide-y divide-gray-200">
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Manutenção Industrial</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Ativo</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-brand-primary cursor-pointer hover:underline">Editar</td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Laudos e CRT</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Ativo</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-brand-primary cursor-pointer hover:underline">Editar</td>
+                    </tr>
+                    <tr>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Orçamento</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-green-600">Ativo</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-brand-primary cursor-pointer hover:underline">Editar</td>
+                    </tr>
+                 </tbody>
+               </table>
+            </div>
           </div>
-          <div className="mt-4 flex md:mt-0 md:ml-4">
-            <button
-              onClick={() => {
+        );
+      case 'settings':
+        return (
+          <div className="bg-white shadow rounded-lg p-6">
+            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-6">Configurações da Conta</h3>
+            <form className="space-y-4 max-w-lg">
+               <div>
+                  <label className="block text-sm font-medium text-gray-700">Email Administrativo</label>
+                  <input type="email" defaultValue="admin@darioeletricidade.com.br" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-primary focus:border-brand-primary sm:text-sm" />
+               </div>
+               <div>
+                  <label className="block text-sm font-medium text-gray-700">Alterar Senha</label>
+                  <input type="password" placeholder="Nova senha" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-brand-primary focus:border-brand-primary sm:text-sm" />
+               </div>
+               <div className="flex items-center">
+                  <input id="notif" type="checkbox" className="h-4 w-4 text-brand-primary focus:ring-brand-primary border-gray-300 rounded" defaultChecked />
+                  <label htmlFor="notif" className="ml-2 block text-sm text-gray-900">Receber notificações por email</label>
+               </div>
+               <button type="button" className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-brand-dark hover:bg-gray-800 focus:outline-none">
+                 Salvar Alterações
+               </button>
+            </form>
+          </div>
+        );
+      case 'appointments':
+      default:
+        return (
+          <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+            <div className="px-4 py-5 sm:px-6 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+              <h3 className="text-lg leading-6 font-medium text-gray-900">Lista de Agendamentos</h3>
+              <div className="relative">
+                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-4 w-4 text-gray-400" />
+                 </div>
+                 <input 
+                    type="text" 
+                    placeholder="Buscar cliente..." 
+                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-brand-primary focus:border-brand-primary"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                 />
+              </div>
+            </div>
+            <ul className="divide-y divide-gray-200 max-h-[600px] overflow-y-auto">
+              {filteredAppointments.length === 0 ? (
+                  <li className="px-4 py-10 text-center text-gray-500">Nenhum agendamento encontrado.</li>
+              ) : (
+                  filteredAppointments.map((appointment) => (
+                  <li key={appointment.id}>
+                      <div className="px-4 py-4 sm:px-6 hover:bg-gray-50 transition-colors">
+                      <div className="flex items-center justify-between">
+                          <p className="text-sm font-bold text-brand-dark flex items-center">
+                             <User className="h-4 w-4 mr-2 text-gray-400" />
+                             {appointment.customerName}
+                          </p>
+                          <div className="ml-2 flex-shrink-0 flex">
+                          {getStatusBadge(appointment.status)}
+                          </div>
+                      </div>
+                      <div className="mt-2 sm:flex sm:justify-between">
+                          <div className="sm:flex flex-col sm:flex-row sm:items-center text-sm text-gray-500">
+                             <p className="flex items-center mr-6 mb-2 sm:mb-0">
+                                <span className="font-semibold mr-1 text-gray-700">Serviço:</span> {appointment.serviceId}
+                             </p>
+                             <p className="flex items-center mr-6 mb-2 sm:mb-0">
+                                <span className="font-semibold mr-1 text-gray-700">Tel:</span> {appointment.customerPhone}
+                             </p>
+                             <div className="flex items-center gap-4">
+                                <p className="flex items-center">
+                                    <Calendar className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
+                                    {appointment.date}
+                                </p>
+                                <p className="flex items-center">
+                                    <Clock className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
+                                    {appointment.time}
+                                </p>
+                             </div>
+                          </div>
+                      </div>
+                      
+                      {appointment.notes && (
+                        <div className="mt-3 text-sm text-gray-600 bg-yellow-50 p-3 rounded-md border border-yellow-100">
+                             <span className="font-semibold text-yellow-800">Nota:</span> {appointment.notes}
+                        </div>
+                      )}
+
+                      <div className="mt-4 flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
+                          {appointment.status === AppointmentStatus.PENDING && (
+                              <>
+                              <button
+                                  onClick={() => onUpdateStatus(appointment.id, AppointmentStatus.CONFIRMED)}
+                                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none transition-colors"
+                              >
+                                  <CheckCircle className="h-3 w-3 mr-1" /> Aprovar
+                              </button>
+                              <button
+                                  onClick={() => onUpdateStatus(appointment.id, AppointmentStatus.CANCELLED)}
+                                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none transition-colors"
+                              >
+                                  <XCircle className="h-3 w-3 mr-1" /> Rejeitar
+                              </button>
+                              </>
+                          )}
+                          {appointment.status === AppointmentStatus.CONFIRMED && (
+                              <button
+                                  onClick={() => onUpdateStatus(appointment.id, AppointmentStatus.COMPLETED)}
+                                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none transition-colors"
+                              >
+                                  <CheckCircle className="h-3 w-3 mr-1" /> Concluir
+                              </button>
+                          )}
+                      </div>
+                      </div>
+                  </li>
+                  ))
+              )}
+            </ul>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
+      
+      {/* Sidebar Navigation */}
+      <aside className="w-64 bg-brand-dark text-white flex flex-col shadow-xl z-20 hidden md:flex">
+        <div className="h-24 flex items-center px-6 border-b border-gray-800">
+           <span className="font-bold text-xl tracking-wider text-white">Dario<span className="text-brand-accent">Admin</span></span>
+        </div>
+        
+        <nav className="flex-1 py-6 px-3 space-y-1">
+          <button
+            onClick={() => setActiveTab('appointments')}
+            className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${
+              activeTab === 'appointments' ? 'bg-brand-primary text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+            }`}
+          >
+            <LayoutDashboard className="mr-3 h-5 w-5" />
+            Agendamentos
+          </button>
+
+          <button
+            onClick={() => setActiveTab('services')}
+            className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${
+              activeTab === 'services' ? 'bg-brand-primary text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+            }`}
+          >
+            <List className="mr-3 h-5 w-5" />
+            Serviços
+          </button>
+
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`w-full flex items-center px-4 py-3 text-sm font-medium rounded-md transition-colors ${
+              activeTab === 'settings' ? 'bg-brand-primary text-white shadow-md' : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+            }`}
+          >
+            <Settings className="mr-3 h-5 w-5" />
+            Configurações
+          </button>
+        </nav>
+
+        <div className="p-4 border-t border-gray-800">
+          <button
+            onClick={() => {
                 setIsAuthenticated(false);
                 onLogout();
-              }}
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none"
-            >
-              <LogOut className="h-4 w-4 mr-2" /> Sair
+            }}
+            className="w-full flex items-center px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded-md transition-colors"
+          >
+            <LogOut className="mr-3 h-5 w-5" />
+            Sair do Sistema
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Mobile Header */}
+        <header className="bg-white shadow-sm border-b border-gray-200 h-16 flex items-center justify-between px-6 md:hidden">
+            <span className="font-bold text-lg text-brand-dark">Painel Administrativo</span>
+            <button onClick={onLogout} className="text-gray-500 hover:text-red-600">
+               <LogOut className="h-6 w-6" />
             </button>
-          </div>
+        </header>
+
+        {/* Mobile Nav Tabs */}
+        <div className="md:hidden flex border-b border-gray-200 bg-white overflow-x-auto">
+            <button 
+              onClick={() => setActiveTab('appointments')}
+              className={`flex-1 py-3 text-sm font-medium border-b-2 ${activeTab === 'appointments' ? 'border-brand-primary text-brand-primary' : 'border-transparent text-gray-500'}`}
+            >
+              Agendamentos
+            </button>
+            <button 
+              onClick={() => setActiveTab('services')}
+              className={`flex-1 py-3 text-sm font-medium border-b-2 ${activeTab === 'services' ? 'border-brand-primary text-brand-primary' : 'border-transparent text-gray-500'}`}
+            >
+              Serviços
+            </button>
+            <button 
+              onClick={() => setActiveTab('settings')}
+              className={`flex-1 py-3 text-sm font-medium border-b-2 ${activeTab === 'settings' ? 'border-brand-primary text-brand-primary' : 'border-transparent text-gray-500'}`}
+            >
+              Config
+            </button>
         </div>
 
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <div className="px-4 py-5 sm:px-6 border-b border-gray-200">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">Agendamentos Recentes</h3>
-          </div>
-          <ul className="divide-y divide-gray-200">
-            {appointments.length === 0 ? (
-                <li className="px-4 py-10 text-center text-gray-500">Nenhum agendamento encontrado.</li>
-            ) : (
-                appointments.map((appointment) => (
-                <li key={appointment.id}>
-                    <div className="px-4 py-4 sm:px-6 hover:bg-gray-50">
-                    <div className="flex items-center justify-between">
-                        <p className="text-sm font-medium text-brand-primary truncate">
-                        {appointment.customerName}
-                        </p>
-                        <div className="ml-2 flex-shrink-0 flex">
-                        {getStatusBadge(appointment.status)}
-                        </div>
-                    </div>
-                    <div className="mt-2 sm:flex sm:justify-between">
-                        <div className="sm:flex">
-                        <p className="flex items-center text-sm text-gray-500 mr-6">
-                            <span className="font-semibold mr-1">Serviço:</span> {appointment.serviceId}
-                        </p>
-                         <p className="flex items-center text-sm text-gray-500 mr-6">
-                            <span className="font-semibold mr-1">Tel:</span> {appointment.customerPhone}
-                        </p>
-                        <p className="flex items-center text-sm text-gray-500 mt-2 sm:mt-0">
-                            <Calendar className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
-                            {appointment.date}
-                        </p>
-                        <p className="flex items-center text-sm text-gray-500 mt-2 sm:mt-0 ml-4">
-                             <Clock className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
-                            {appointment.time}
-                        </p>
-                        </div>
-                        <div className="mt-2 flex items-center text-sm sm:mt-0 gap-2">
-                        {appointment.status === AppointmentStatus.PENDING && (
-                            <>
-                            <button
-                                onClick={() => onUpdateStatus(appointment.id, AppointmentStatus.CONFIRMED)}
-                                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 focus:outline-none"
-                            >
-                                <CheckCircle className="h-3 w-3 mr-1" /> Aprovar
-                            </button>
-                            <button
-                                onClick={() => onUpdateStatus(appointment.id, AppointmentStatus.CANCELLED)}
-                                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none"
-                            >
-                                <XCircle className="h-3 w-3 mr-1" /> Rejeitar
-                            </button>
-                            </>
-                        )}
-                        {appointment.status === AppointmentStatus.CONFIRMED && (
-                             <button
-                                onClick={() => onUpdateStatus(appointment.id, AppointmentStatus.COMPLETED)}
-                                className="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 focus:outline-none"
-                            >
-                                <CheckCircle className="h-3 w-3 mr-1" /> Concluir
-                            </button>
-                        )}
-                        </div>
-                    </div>
-                    {appointment.notes && (
-                        <div className="mt-2 text-sm text-gray-500 italic bg-gray-50 p-2 rounded">
-                            "{appointment.notes}"
-                        </div>
-                    )}
-                    </div>
-                </li>
-                ))
-            )}
-          </ul>
-        </div>
+        {/* Scrollable Content */}
+        <main className="flex-1 overflow-y-auto bg-gray-100 p-6">
+           <div className="max-w-7xl mx-auto">
+              <div className="mb-6">
+                <h1 className="text-2xl font-bold text-gray-900 capitalize">
+                  {activeTab === 'appointments' ? 'Gestão de Agendamentos' : activeTab === 'services' ? 'Catálogo de Serviços' : 'Configurações'}
+                </h1>
+                <p className="text-sm text-gray-500">
+                   Bem-vindo de volta, Administrador.
+                </p>
+              </div>
+              {renderContent()}
+           </div>
+        </main>
       </div>
     </div>
   );

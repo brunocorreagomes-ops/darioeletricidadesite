@@ -6,41 +6,28 @@ interface ServicesSectionProps {
   onBookService: (serviceId: string) => void;
 }
 
+// Updated list: Removed Residential and Solar. Renamed Projects to include CRT context.
 const servicesList: Service[] = [
-  {
-    id: 'res',
-    title: 'Elétrica Residencial',
-    description: 'Instalação completa, troca de fiação, quadros de distribuição e iluminação moderna.',
-    iconName: 'home',
-    priceRange: 'A partir de R$ 150,00'
-  },
   {
     id: 'ind',
     title: 'Manutenção Industrial',
-    description: 'Manutenção preventiva e corretiva em motores, painéis de comando e subestações.',
+    description: 'Manutenção preventiva e corretiva em motores e painéis de comando.',
     iconName: 'factory',
     priceRange: 'Sob orçamento'
   },
   {
-    id: 'solar',
-    title: 'Energia Solar',
-    description: 'Projeto, instalação e limpeza de painéis fotovoltaicos para economia de energia.',
-    iconName: 'sun',
-    priceRange: 'Sob orçamento'
-  },
-  {
     id: 'proj',
-    title: 'Projetos e Laudos',
-    description: 'Emissão de ART, laudos técnicos e projetos elétricos conforme normas vigentes.',
+    title: 'Laudos, CRT e Projetos',
+    description: 'Emissão de ART, CRT, laudos técnicos detalhados e projetos elétricos conforme normas vigentes (NR-10).',
     iconName: 'zap',
     priceRange: 'A partir de R$ 500,00'
   },
   {
     id: 'budget',
-    title: 'Orçamento',
-    description: 'Avaliação técnica presencial e emissão de cotações detalhadas para execução de serviços.',
+    title: 'Orçamento Geral',
+    description: 'Avaliação técnica presencial e emissão de cotações detalhadas para execução de serviços específicos.',
     iconName: 'dollar',
-    priceRange: 'A partir de R$ 50,00'
+    priceRange: 'Visita técnica a combinar'
   },
 ];
 
@@ -60,13 +47,14 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onBookService }) => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
           <h2 className="text-brand-primary font-bold tracking-wide uppercase text-sm mb-3">Nossos Serviços</h2>
-          <h3 className="text-4xl md:text-5xl font-extrabold text-brand-dark mb-6">Soluções Completas para sua Necessidade</h3>
+          <h3 className="text-4xl md:text-5xl font-extrabold text-brand-dark mb-6">Soluções Corporativas e Industriais</h3>
           <p className="max-w-2xl mx-auto text-gray-500 text-xl">
-            Da troca de uma tomada à instalação de complexos industriais, a Dario Eletricidade garante qualidade e segurança.
+            Especialistas em instalações elétricas, regularização técnica e manutenção para sua empresa.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        {/* Centered Grid with fewer items */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {servicesList.map((service) => {
             const isHighlight = service.id === 'budget';
             return (

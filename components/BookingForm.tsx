@@ -9,12 +9,11 @@ interface BookingFormProps {
 }
 
 // Service options configuration for the visual selector
+// Updated to reflect the filtered services: Industrial, Laudos/CRT, and Budget
 const serviceOptions = [
   { id: 'budget', label: 'Orçamento', icon: DollarSign },
-  { id: 'res', label: 'Residencial', icon: Home },
   { id: 'ind', label: 'Industrial', icon: Factory },
-  { id: 'solar', label: 'Solar', icon: Sun },
-  { id: 'proj', label: 'Projetos', icon: Zap },
+  { id: 'proj', label: 'Laudos/CRT', icon: Zap },
 ];
 
 const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, onCancel, initialPhone = '' }) => {
@@ -110,7 +109,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSubmit, onCancel, initialPh
           {/* Visual Service Selection */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">O que você precisa?</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {serviceOptions.map((option) => {
                 const Icon = option.icon;
                 const isSelected = formData.serviceId === option.id;
