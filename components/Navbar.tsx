@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
-import { ViewState } from '../types';
 import { Menu, X, Zap } from 'lucide-react';
 
 interface NavbarProps {
-  currentView: ViewState;
-  onChangeView: (view: ViewState) => void;
+  // Removed view props as we are now using anchor links
 }
 
-const Navbar: React.FC<NavbarProps> = ({ currentView, onChangeView }) => {
+const Navbar: React.FC<NavbarProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { label: 'Início', value: 'home' as ViewState },
-    { label: 'Serviços', value: 'services' as ViewState },
-    { label: 'Administração', value: 'admin' as ViewState },
+    { label: 'Início', href: '#home' },
+    { label: 'Serviços', href: '#services' },
+    { label: 'Depoimentos', href: '#testimonials' },
   ];
+
+  const handleNavClick = (href: string) => {
+    setIsOpen(false);
+    // Smooth scroll handles the navigation via CSS, but we ensure the mobile menu closes
+    const element = document.querySelector(href);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <nav className="bg-brand-dark text-white sticky top-0 z-50 shadow-lg border-b border-gray-800" role="navigation" aria-label="Menu principal">
@@ -22,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onChangeView }) => {
         <div className="flex items-center justify-between h-24">
           
           {/* Logo Area */}
-          <div className="flex items-center cursor-pointer" onClick={() => onChangeView('home')} role="button" tabIndex={0} onKeyDown={(e) => e.key === 'Enter' && onChangeView('home')} aria-label="Ir para página inicial">
+          <a href="#home" className="flex items-center cursor-pointer" aria-label="Ir para página inicial">
              <div className="relative h-20 w-auto flex items-center py-2">
                 <img 
                   src="https://i.postimg.cc/sxG9BRqJ/dario-eletricidade-QUADRADO-LOGO-FUNDO-TRANSPARENTE.png" 
@@ -30,32 +37,27 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onChangeView }) => {
                   className="h-full w-auto object-contain" 
                 />
              </div>
-          </div>
+          </a>
 
           {/* Desktop Menu */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               {navItems.map((item) => (
-                <button
+                <a
                   key={item.label}
-                  onClick={() => onChangeView(item.value)}
-                  aria-current={currentView === item.value ? 'page' : undefined}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
-                    currentView === item.value
-                      ? 'text-brand-accent bg-white/5'
-                      : 'text-gray-300 hover:text-white hover:bg-gray-800'
-                  }`}
+                  href={item.href}
+                  className="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-800 transition-colors duration-200"
                 >
                   {item.label}
-                </button>
+                </a>
               ))}
-              <button
-                onClick={() => onChangeView('booking')}
+              <a
+                href="#contact"
                 className="bg-brand-accent hover:bg-orange-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-accent focus:ring-offset-brand-dark"
                 aria-label="Pedir Orçamento Grátis"
               >
                 <Zap className="h-5 w-5 fill-current" aria-hidden="true" /> Orçamento Grátis
-              </button>
+              </a>
             </div>
           </div>
 
@@ -80,24 +82,14 @@ const Navbar: React.FC<NavbarProps> = ({ currentView, onChangeView }) => {
             {navItems.map((item) => (
               <button
                 key={item.label}
-                onClick={() => {
-                  onChangeView(item.value);
-                  setIsOpen(false);
-                }}
-                className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium ${
-                  currentView === item.value
-                    ? 'text-brand-accent bg-gray-900'
-                    : 'text-gray-300 hover:text-white hover:bg-gray-800'
-                }`}
+                onClick={() => handleNavClick(item.href)}
+                className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800"
               >
                 {item.label}
               </button>
             ))}
             <button
-              onClick={() => {
-                onChangeView('booking');
-                setIsOpen(false);
-              }}
+              onClick={() => handleNavClick('#contact')}
               className="w-full flex justify-center items-center mt-4 bg-brand-accent hover:bg-orange-600 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-md gap-2"
             >
               <Zap className="h-5 w-5 fill-current" aria-hidden="true" /> Pedir Orçamento Grátis

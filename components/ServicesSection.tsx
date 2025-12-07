@@ -43,7 +43,7 @@ const getIcon = (name: string) => {
 
 const ServicesSection: React.FC<ServicesSectionProps> = ({ onBookService }) => {
   return (
-    <section className="bg-gray-50 py-16 lg:py-24 px-4 sm:px-6 lg:px-8" aria-label="Nossos Serviços">
+    <div className="bg-gray-50 py-16 lg:py-24 px-4 sm:px-6 lg:px-8" aria-label="Nossos Serviços">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16 lg:mb-20">
           <h2 className="text-brand-primary font-bold tracking-wide uppercase text-sm mb-3">Nossos Serviços</h2>
@@ -134,7 +134,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ onBookService }) => {
           })}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

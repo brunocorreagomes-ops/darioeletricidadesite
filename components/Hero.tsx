@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { ShieldCheck, Clock, Award, ArrowRight, MessageCircle } from 'lucide-react';
 
 interface HeroProps {
-  onBookClick: () => void;
   onQuickContact: (phone: string) => void;
 }
 
-const Hero: React.FC<HeroProps> = ({ onBookClick, onQuickContact }) => {
+const Hero: React.FC<HeroProps> = ({ onQuickContact }) => {
   const [quickPhone, setQuickPhone] = useState('');
 
   const handleQuickSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (quickPhone) {
       onQuickContact(quickPhone);
+      // Scroll to contact form
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
     } else {
-      onBookClick();
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -77,12 +78,12 @@ const Hero: React.FC<HeroProps> = ({ onBookClick, onQuickContact }) => {
             >
               <MessageCircle className="h-5 w-5" /> Falar no WhatsApp
             </a>
-            <button 
-              onClick={onBookClick}
-              className="px-8 py-4 bg-transparent border-2 border-gray-600 hover:border-white text-white font-semibold rounded-xl transition-colors w-full sm:w-auto"
+            <a 
+              href="#services"
+              className="px-8 py-4 bg-transparent border-2 border-gray-600 hover:border-white text-white font-semibold rounded-xl transition-colors w-full sm:w-auto text-center flex items-center justify-center"
             >
               Ver Todos Serviços
-            </button>
+            </a>
           </div>
 
           <div className="mt-12 grid grid-cols-3 gap-4 border-t border-gray-800 pt-8">

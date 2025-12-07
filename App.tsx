@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ServicesSection from './components/ServicesSection';
@@ -7,9 +7,8 @@ import AdminDashboard from './components/AdminDashboard';
 import Footer from './components/Footer';
 import ChatAssistant from './components/ChatAssistant';
 import Testimonials from './components/Testimonials';
-import BookingConfirmation from './components/BookingConfirmation';
-import { ViewState, Appointment, AppointmentStatus } from './types';
-import { MessageCircle } from 'lucide-react';
+import { Appointment, AppointmentStatus } from './types';
+import { MessageCircle, ArrowLeft } from 'lucide-react';
 
 // Initial Mock Data
 const initialAppointments: Appointment[] = [
@@ -36,25 +35,25 @@ const initialAppointments: Appointment[] = [
 ];
 
 const App: React.FC = () => {
-  const [currentView, setCurrentView] = useState<ViewState>('home');
+  // State mainly for Admin and Data persistence, not for View Navigation
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [appointments, setAppointments] = useState<Appointment[]>(initialAppointments);
-  const [lastAppointment, setLastAppointment] = useState<Appointment | null>(null);
+  
+  // State to pass data between Hero/Services and the Contact Form section
   const [prefilledPhone, setPrefilledPhone] = useState<string>('');
+  const [selectedService, setSelectedService] = useState<string>('budget');
 
-  // Auto-scroll to top when view changes
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [currentView]);
-
-  const handleBookService = (serviceId?: string) => {
-    setPrefilledPhone(''); // Clear prefilled if coming from generic book button
-    setCurrentView('booking');
-    console.log(`Booking started for ${serviceId || 'general'}`);
+  const handleBookService = (serviceId: string) => {
+    setSelectedService(serviceId);
+    setPrefilledPhone(''); // Clear generic phone if specific service selected
+    
+    // Smooth scroll to contact section
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleQuickContact = (phone: string) => {
     setPrefilledPhone(phone);
-    setCurrentView('booking');
+    setSelectedService('budget'); // Default to budget for quick contact
   };
 
   const handleBookingSubmit = (newBooking: Omit<Appointment, 'id' | 'status'>) => {
@@ -64,8 +63,7 @@ const App: React.FC = () => {
       status: AppointmentStatus.PENDING
     };
     setAppointments([...appointments, appointment]);
-    setLastAppointment(appointment);
-    setCurrentView('confirmation');
+    // Note: The success UI is handled inside BookingForm component
   };
 
   const handleStatusUpdate = (id: string, status: AppointmentStatus) => {
@@ -74,73 +72,65 @@ const App: React.FC = () => {
     ));
   };
 
-  const renderContent = () => {
-    switch (currentView) {
-      case 'home':
-        return (
-          <>
-            <Hero onBookClick={() => handleBookService()} onQuickContact={handleQuickContact} />
-            <ServicesSection onBookService={handleBookService} />
-            <Testimonials />
-          </>
-        );
-      case 'services':
-        return <ServicesSection onBookService={handleBookService} />;
-      case 'booking':
-        return (
-          <BookingForm 
-            initialPhone={prefilledPhone}
-            onSubmit={handleBookingSubmit} 
-            onCancel={() => setCurrentView('home')} 
-          />
-        );
-      case 'confirmation':
-        return (
-          <BookingConfirmation 
-            appointment={lastAppointment} 
-            onHomeClick={() => setCurrentView('home')} 
-          />
-        );
-      case 'admin':
-        return (
-          <AdminDashboard 
+  // If Admin is Open, show Admin Dashboard overlay
+  if (isAdminOpen) {
+    return (
+      <div className="relative min-h-screen bg-gray-100">
+         <button 
+           onClick={() => setIsAdminOpen(false)}
+           className="absolute top-4 right-4 z-50 bg-white px-4 py-2 rounded-lg shadow text-sm font-bold text-gray-700 hover:bg-gray-50 flex items-center"
+         >
+           <ArrowLeft className="h-4 w-4 mr-2" /> Voltar ao Site
+         </button>
+         <AdminDashboard 
             appointments={appointments} 
             onUpdateStatus={handleStatusUpdate}
-            onLogout={() => setCurrentView('home')}
+            onLogout={() => setIsAdminOpen(false)}
           />
-        );
-      default:
-        return <Hero onBookClick={() => handleBookService()} onQuickContact={handleQuickContact} />;
-    }
-  };
+      </div>
+    );
+  }
 
+  // Standard Landing Page Layout
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Hide Navbar on confirmation screen for focus, show on others unless admin */}
-      {currentView !== 'admin' && currentView !== 'confirmation' && (
-        <Navbar currentView={currentView} onChangeView={setCurrentView} />
-      )}
+    <div className="flex flex-col min-h-screen font-sans text-gray-900">
+      <Navbar />
       
       <main className="flex-grow">
-        {renderContent()}
+        <section id="home">
+          <Hero onQuickContact={handleQuickContact} />
+        </section>
+
+        <section id="services">
+          <ServicesSection onBookService={handleBookService} />
+        </section>
+
+        <section id="testimonials">
+          <Testimonials />
+        </section>
+
+        {/* Contact section is now embedded directly in the page flow */}
+        <BookingForm 
+          preselectedService={selectedService}
+          initialPhone={prefilledPhone}
+          onSubmit={handleBookingSubmit}
+        />
       </main>
 
-      {/* Floating WhatsApp Button - Hide on Admin and Confirmation */}
-      {currentView !== 'admin' && currentView !== 'confirmation' && (
-        <a 
-          href="https://wa.me/5519997869520" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="fixed bottom-6 left-6 z-50 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-lg transition-transform hover:scale-110 flex items-center justify-center border-2 border-white"
-          aria-label="Falar no WhatsApp"
-        >
-          <MessageCircle className="h-8 w-8" />
-        </a>
-      )}
+      {/* Floating WhatsApp Button */}
+      <a 
+        href="https://wa.me/5519997869520" 
+        target="_blank" 
+        rel="noopener noreferrer"
+        className="fixed bottom-6 left-6 z-40 bg-[#25D366] hover:bg-[#128C7E] text-white p-4 rounded-full shadow-lg transition-transform hover:scale-110 flex items-center justify-center border-2 border-white"
+        aria-label="Falar no WhatsApp"
+      >
+        <MessageCircle className="h-8 w-8" />
+      </a>
 
-      {currentView !== 'admin' && <ChatAssistant />}
+      <ChatAssistant />
 
-      {currentView !== 'admin' && currentView !== 'confirmation' && <Footer />}
+      <Footer onOpenAdmin={() => setIsAdminOpen(true)} />
     </div>
   );
 };

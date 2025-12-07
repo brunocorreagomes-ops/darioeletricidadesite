@@ -1,7 +1,11 @@
 import React from 'react';
-import { MapPin, Phone, Mail } from 'lucide-react';
+import { MapPin, Phone, Mail, Lock } from 'lucide-react';
 
-const Footer: React.FC = () => {
+interface FooterProps {
+  onOpenAdmin: () => void;
+}
+
+const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
   return (
     <footer className="bg-brand-dark text-gray-300 border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -23,9 +27,9 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-white font-semibold uppercase tracking-wider mb-4">Serviços</h4>
             <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-brand-accent transition-colors">Industrial</a></li>
-              <li><a href="#" className="hover:text-brand-accent transition-colors">Laudos e CRT</a></li>
-              <li><a href="#" className="hover:text-brand-accent transition-colors">Orçamentos</a></li>
+              <li><a href="#services" className="hover:text-brand-accent transition-colors">Industrial</a></li>
+              <li><a href="#services" className="hover:text-brand-accent transition-colors">Laudos e CRT</a></li>
+              <li><a href="#contact" className="hover:text-brand-accent transition-colors">Orçamentos</a></li>
             </ul>
           </div>
 
@@ -57,8 +61,11 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-8 text-center text-xs text-gray-500">
-          &copy; {new Date().getFullYear()} Dario Eletricidade. Criado por Orvalia Studio. Todos os direitos reservados.
+        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500">
+          <p>&copy; {new Date().getFullYear()} Dario Eletricidade. Criado por Orvalia Studio. Todos os direitos reservados.</p>
+          <button onClick={onOpenAdmin} className="mt-4 sm:mt-0 flex items-center hover:text-gray-300 transition-colors">
+            <Lock className="h-3 w-3 mr-1" /> Área do Colaborador
+          </button>
         </div>
       </div>
     </footer>
